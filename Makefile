@@ -12,6 +12,7 @@ UI_TEST_SOURCES = ui_test.cpp
 OBJS = $(addsuffix .o, $(basename $(SOURCES)))
 IMGUI_OBJS = $(addsuffix .o, $(basename $(IMGUI_SOURCES)))
 IMGUI_OBJS += UI_LIB/gl3w.o
+IMGUI_NOTDIR_OBJS = $(notdir $(IMGUI_OBJS))
 UI_TEST_OBJS = $(addsuffix .o, $(basename $(UI_TEST_SOURCES)))
 
 LIBS =
@@ -47,7 +48,7 @@ all:$(EXE)
 
 imgui:
 	@echo making imgui
-	cd UI_LIB && $(MAKE)
+	cd UI_LIB && $(RM) $(IMGUI_NOTDIR_OBJS) && $(MAKE)
 
 $(EXE): imgui $(OBJS)
 	$(CXX) -o $(EXE) $(OBJS) $(IMGUI_OBJS) $(DLLS) $(CXXFLAGS) $(LIBS)
