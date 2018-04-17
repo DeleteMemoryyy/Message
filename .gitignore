@@ -1,5 +1,12 @@
-.vscode/
+# Binary Files
 ui_test
+Message
+
+# ImGui setting
+imgui.ini
+
+# VS Code
+.vscode/
 
 # Prerequisites
 *.d
