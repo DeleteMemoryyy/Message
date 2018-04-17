@@ -1,11 +1,5 @@
-.idea/
-.vscode/
-gdbop
-InstTest
-riscv-simulator
+# .vscode/
 ui_test
-debug
-venus.log
 
 # Prerequisites
 *.d

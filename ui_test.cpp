@@ -34,14 +34,17 @@ int main(int, char**)
     // Setup ImGui binding
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+
+    
+
     ImGui_ImplGlfwGL3_Init(window, true);
 
     // Setup style
-    ImGui::StyleColorsDark();
+    // ImGui::StyleColorsDark();
     //ImGui::StyleColorsClassic();
-	//ImGui::StyleColorsLight();
+	ImGui::StyleColorsLight();
 
     // Load Fonts
     // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
@@ -58,6 +61,7 @@ int main(int, char**)
     ImFont *font = io.Fonts->AddFontFromFileTTF("UI_LIB/extra_fonts/Yahei_Segoe.ttf", 16.0f, NULL,
                                                 io.Fonts->GetGlyphRangesChinese());
     IM_ASSERT(font != NULL);
+    io.FontDefault = font;
 
     bool show_demo_window = true;
     bool show_another_window = false;
@@ -79,7 +83,7 @@ int main(int, char**)
             static float f = 0.0f;
             static int counter = 0;
             ImGui::Text("Hello, world!");                           // Display some text (you can use a format string too)
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
             ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
             ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our windows open/close state
@@ -97,7 +101,6 @@ int main(int, char**)
         if (show_another_window)
         {
             ImGui::Begin("Another Window", &show_another_window);
-			ImGui::StyleColorsLight();
 			
             ImGui::Text("Hello from another window!");
             if (ImGui::Button("Close Me"))

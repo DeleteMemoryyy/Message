@@ -23,7 +23,7 @@ CXXFLAGS += -IUI_LIB/libs/glfw/include
 CFLAGS = $(CXXFLAGS)
 
 ifeq ($(OS),Windows_NT) #WINDOWS
-   ECHO_MESSAGE = "Windows"
+   ECHO_MESSAGE = Windows
    MAKE = mingw32-make
    RM = del
 
@@ -33,7 +33,7 @@ ifeq ($(OS),Windows_NT) #WINDOWS
 else
 	UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
-		ECHO_MESSAGE = "Linux"
+		ECHO_MESSAGE = Linux
 		LIBS = -lGL `pkg-config --static --libs glfw3`
 		CXXFLAGS += `pkg-config --cflags glfw3`
 		CFLAGS = $(CXXFLAGS)
@@ -47,7 +47,7 @@ all:$(EXE)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 imgui:
-	@echo making imgui
+	@echo Building imgui
 	cd UI_LIB && $(RM) $(IMGUI_NOTDIR_OBJS) && $(MAKE)
 
 $(EXE): imgui $(OBJS)
@@ -57,6 +57,7 @@ $(EXE): imgui $(OBJS)
 ui_test: imgui $(UI_TEST_OBJS)
 	$(CXX) -o $(UI_TEST_EXE) $(UI_TEST_OBJS) $(IMGUI_OBJS) $(DLLS) $(CXXFLAGS) $(LIBS)
 	$(RM) $(UI_TEST_OBJS)
+	@echo Build ui_test complete for $(ECHO_MESSAGE)
 
 clean:
 	$(RM) $(EXE) && $(RM) $(UI_TEST_EXE)
