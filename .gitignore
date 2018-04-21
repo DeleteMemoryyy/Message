@@ -1,6 +1,7 @@
 # Binary Files
-ui_test
-Message
+Message_Server
+Message_Client
+UI_Test
 
 # ImGui setting
 imgui.ini
