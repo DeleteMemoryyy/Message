@@ -28,7 +28,7 @@ UI_TEST_OBJS = $(addsuffix .o, $(basename $(UI_TEST_SOURCES)))
 
 # UI_FLAG = -mwindows
 LIBS =
-CXXFLAGS = -Wall -Wformat -static
+CXXFLAGS = -Wall -Wformat
 # CXXFLAGS += -g
 CXXFLAGS += -IUI_LIB
 CXXFLAGS += -IUI_LIB/libs/gl3w
