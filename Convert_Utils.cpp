@@ -19,3 +19,57 @@ int init_socket()
 #endif
     return 0;
 }
+
+int process_request(char *buf)
+{
+    char *primitiveSt = strstr(buf, PRIMITIVE[I_REQUEST]);
+    if (primitiveSt != NULL)
+        {
+            char *portSt = strchr(primitiveSt, ' ');
+            if (portSt != NULL)
+                {
+                    int port = atoi(portSt);
+                    return port;
+                }
+            else
+                return -1;
+        }
+    else
+        return -1;
+}
+
+int process_response(char *buf)
+{
+    char *primitiveSt = strstr(buf, PRIMITIVE[I_RESPONSE]);
+    if (primitiveSt != NULL)
+        {
+            char *portSt = strchr(primitiveSt, ' ');
+            if (portSt != NULL)
+                {
+                    int port = atoi(portSt);
+                    return port;
+                }
+            else
+                return -1;
+        }
+    else
+        return -1;
+}
+
+int process_disconnect(char *buf)
+{
+    char *primitiveSt = strstr(buf, PRIMITIVE[I_DISCONNECT]);
+    if (primitiveSt != NULL)
+        {
+            char *portSt = strchr(primitiveSt, ' ');
+            if (portSt != NULL)
+                {
+                    int port = atoi(portSt);
+                    return port;
+                }
+            else
+                return -1;
+        }
+    else
+        return -1;
+}

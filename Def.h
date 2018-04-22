@@ -4,6 +4,7 @@
 #include <Winsock2.h>
 typedef int socklen_t;
 #define MSG_NOSIGNAL 0
+#define MSG_DONTWAIT 0
 #elif defined(__linux__)
 #include <arpa/inet.h>
 #include <fcntl.h>
@@ -21,13 +22,22 @@ typedef sockaddr SOCKADDR;
 
 #include <cstdio>
 #include <cstring>
+#include <cstdlib>
 #include <iostream>
 
-#define I_CONNECT 0
-#define I_DISCONNECT 1
+#define CONNECT_BUF_SIZE (1000)
 
-const char[] PRIMITIVE = {"CONNECT", "DISCONNECT"};
+#define I_REQUEST 0
+#define I_RESPONSE 1
+#define I_DISCONNECT 2
+#define I_RESPONSE_DISCONNECT 3
+
+const char PRIMITIVE[][100] = {"REQUEST", "RESPONSE", "DISCONNECT", "RESPONSE_DISCONNECT"};
 
 int init_socket();
+int process_request(char*);
+int process_response(char*);
+int process_disconnect(char*);
+
 
 #endif  // !DEF_H_
