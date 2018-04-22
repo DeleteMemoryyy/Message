@@ -35,8 +35,7 @@ struct Console
         Commands.push_back("HELP");
         Commands.push_back("HISTORY");
         Commands.push_back("CLEAR");
-        Commands.push_back("CLASSIFY");  // "classify" is here to provide an example of "C"+[tab]
-                                         // completing to "CL" and displaying matches.
+
         AddLog("Connect success!\n\n");
     }
     ~Console()
@@ -96,10 +95,11 @@ struct Console
         ScrollToBottom = true;
     }
 
-    void Draw(const char *title, bool *p_open, char *ip, int port)
+    void Draw(const char *title, bool *p_open, char *ip, int port, unsigned long long time)
     {
         ImGui::SetNextWindowSize(ImVec2(580, 600), ImGuiSetCond_Always);
-        if (!ImGui::Begin(title, p_open,
+        ImGui::SetNextWindowPos(ImVec2(30, 60), ImGuiSetCond_Always);
+        if (!ImGui::Begin(title, NULL,
                           ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
                               ImGuiWindowFlags_NoCollapse))
             {
@@ -128,8 +128,10 @@ struct Console
             ScrollToBottom = true;
         ImGui::SameLine();
         disconnectFlag = false;
+        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(252, 146, 114,220));
         if (ImGui::SmallButton("Disconnect"))
             disconnectFlag = true;
+        ImGui::PopStyleColor();
         // static float t = 0.0f; if (ImGui::GetTime() - t > 0.02f) { t = ImGui::GetTime();
         // AddLog("Spam %f", t); }
 
@@ -139,6 +141,8 @@ struct Console
         static ImGuiTextFilter filter;
         filter.Draw("Filter", 180);
         ImGui::PopStyleVar();
+        ImGui::SameLine(500.0f);
+        ImGui::Text("Lag: %lldms", time);
         ImGui::Separator();
 
         const float footer_height_to_reserve =
@@ -301,7 +305,6 @@ struct Console
                         else
                             {
                                 // Multiple matches. Complete as much as we can, so inputing "C"
-                                // will complete to "CL" and display "CLEAR" and "CLASSIFY"
                                 int match_len = (int)(word_end - word_start);
                                 for (;;)
                                     {
@@ -404,7 +407,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow *window = glfwCreateWindow(1280, 720, "Message Client", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(640, 720, "Message Client", NULL, NULL);
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);  // Enable vsync
     gl3wInit();
@@ -455,7 +458,7 @@ int main()
                     ImGui_ImplGlfwGL3_NewFrame();
 
                     ImGui::SetNextWindowSize(ImVec2(450, 200), ImGuiSetCond_Once);
-                    ImGui::SetNextWindowPos(ImVec2(20, 5), ImGuiSetCond_Once);
+                    ImGui::SetNextWindowPos(ImVec2(40, 20), ImGuiSetCond_Once);
                     ImGui::Begin("Config", NULL,
                                  ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
                                      ImGuiWindowFlags_NoCollapse);
@@ -546,6 +549,9 @@ int main()
                             printf("Connecting %s:%d\n", inet_ntoa(addrConn.sin_addr),
                                    htons(addrConn.sin_port));
                             addrConn.sin_port = htons(connPort);
+                            unsigned long long timeSent = GetCurrentTimeMsec();
+                            unsigned long long timeLag = -1LL;
+                            bool clacLag = true;
                             connect(sockConn, (SOCKADDR *)&addrConn, sizeof(SOCKADDR));
                             char *strIp = inet_ntoa(addrConn.sin_addr);
                             printf("Connect to server %s:%d\n", strIp, connPort);
@@ -611,6 +617,11 @@ int main()
 #endif
                                     else
                                         {
+                                            if (clacLag)
+                                                {
+                                                    timeLag = (GetCurrentTimeMsec() - timeSent) / 2;
+                                                    clacLag = false;
+                                                }
                                             console.AddLog("[Server] %s\n\n", recvBuf);
                                             printf("Redeived: %s\n", recvBuf);
                                         }
@@ -622,10 +633,12 @@ int main()
                                     glfwPollEvents();
                                     ImGui_ImplGlfwGL3_NewFrame();
 
-                                    console.Draw("Message", &consoleOpen, strIp, connPort);
+                                    console.Draw("Message", &consoleOpen, strIp, connPort, timeLag);
                                     if (console.inputFlag)
                                         {
                                             printf("Message to send: %s\n", console.sendBuf);
+                                            timeSent = GetCurrentTimeMsec();
+                                            clacLag = true;
                                             send(sockConn, console.sendBuf,
                                                  strlen(console.sendBuf) + 1, MSG_DONTWAIT);
                                         }

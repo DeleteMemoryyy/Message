@@ -13,7 +13,7 @@ UI_TEST_EXE = $(UI_TEST)
 SOURCES =
 SERVER_SOURCES = Server.cpp
 CLIENT_SOURCES = Client.cpp
-CONVERT_SOURCES = Convert_Utils.cpp
+CONVERT_SOURCES = Utils.cpp
 IMGUI_SOURCES = UI_LIB/imgui_impl_glfw_gl3.cpp UI_LIB/imgui.cpp UI_LIB/imgui_demo.cpp UI_LIB/imgui_draw.cpp
 UI_TEST_SOURCES = UI_Test.cpp
 
@@ -26,7 +26,6 @@ IMGUI_OBJS += UI_LIB/gl3w.o
 IMGUI_NOTDIR_OBJS = $(notdir $(IMGUI_OBJS))
 UI_TEST_OBJS = $(addsuffix .o, $(basename $(UI_TEST_SOURCES)))
 
-# UI_FLAG = -mwindows
 LIBS =
 CXXFLAGS = -Wall -Wformat
 # CXXFLAGS += -g
@@ -39,6 +38,7 @@ ifeq ($(OS),Windows_NT) #WINDOWS
    ECHO_MESSAGE = Windows
    MAKE = mingw32-make
    RM = del
+   UI_FLAG = -mwindows
 
    SERVER_EXE = $(addsuffix .exe, $(basename $(SERVER)))
    CLIENT_EXE = $(addsuffix .exe, $(basename $(CLIENT)))
@@ -47,6 +47,7 @@ ifeq ($(OS),Windows_NT) #WINDOWS
    LIBS = -lgdi32 -lopengl32 -limm32 -lws2_32
    DLLS += UI_LIB/libs/glfw/lib-mingw-w64/libglfw3.a
    DLLS += UI_LIB/libs/glfw/lib-mingw-w64/libglfw3dll.a
+   CXXFLAGS += -static
    CFLAGS = $(CXXFLAGS)
 else
 	UNAME_S := $(shell uname -s)

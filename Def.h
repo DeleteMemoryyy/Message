@@ -3,6 +3,8 @@
 
 #if defined(WIN32)
 #include <Winsock2.h>
+#include <time.h>
+
 typedef int socklen_t;
 #define MSG_NOSIGNAL 0
 #define MSG_DONTWAIT 0
@@ -12,6 +14,7 @@ typedef int socklen_t;
 #include <fcntl.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <sys/time.h>
 #include <unistd.h>
 typedef int SOCKET;
 typedef unsigned char BYTE;
@@ -40,6 +43,7 @@ int init_socket();
 int process_request(char *);
 int process_response(char *);
 int process_disconnect(char *);
+unsigned long long GetCurrentTimeMsec();
 
 
 #endif  // !DEF_H_
