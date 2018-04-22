@@ -1,4 +1,4 @@
-#ifndef CONVERT_UTILS_H_
+#ifndef DEF_H_
 
 #if defined(WIN32)
 #include <Winsock2.h>
@@ -23,6 +23,11 @@ typedef sockaddr SOCKADDR;
 #include <cstring>
 #include <iostream>
 
+#define I_CONNECT 0
+#define I_DISCONNECT 1
+
+const char[] PRIMITIVE = {"CONNECT", "DISCONNECT"};
+
 int init_socket();
 
-#endif  // !CONVERT_UTILS_H_
+#endif  // !DEF_H_

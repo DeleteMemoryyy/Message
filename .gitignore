@@ -2,6 +2,7 @@
 Message_Server
 Message_Client
 UI_Test
+!bin/*
 
 # ImGui setting
 imgui.ini

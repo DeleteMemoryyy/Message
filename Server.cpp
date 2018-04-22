@@ -1,4 +1,4 @@
-#include "Convert_Utils.h"
+#include "Def.h"
 
 using namespace std;
 
@@ -25,19 +25,22 @@ int main()
 
     bind(sockSrv, (SOCKADDR *)&addrSrv, sizeof(SOCKADDR));
 
-    listen(sockSrv, MAX_QUEUE_SIZE);
-
     SOCKADDR_IN addrClient;
+    char srvBuf[100];
 
 #if defined(WIN32)
-    int sockAddrLen = sizeof(SOCKADDR);
+    int addrLen = sizeof(SOCKADDR);
 #elif defined(__linux__)
-    unsigned int sockAddrLen = sizeof(SOCKADDR);
+    unsigned int addrLen = sizeof(SOCKADDR);
 #endif
 
     while (true)
         {
-            SOCKET sockConn = accept(sockSrv, (SOCKADDR *)&addrClient, &sockAddrLen);
+            int recvLen =
+                recvfrom(sockSrv, srvBuf, sizeof(srvBuf), MSG_DONTWAIT, &addrSrv, &addrLen);
+
+            // SOCKET sockConn = accept(sockSrv, (SOCKADDR *)&addrClient, &sockAddrLen);
+            // listen(sockSrv, MAX_QUEUE_SIZE);
 
             char sendBuf[100];
             sprintf(sendBuf, "Welcome %s to the server program~ \nNow, let's start talking...\n",
