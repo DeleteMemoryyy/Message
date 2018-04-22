@@ -26,9 +26,10 @@ IMGUI_OBJS += UI_LIB/gl3w.o
 IMGUI_NOTDIR_OBJS = $(notdir $(IMGUI_OBJS))
 UI_TEST_OBJS = $(addsuffix .o, $(basename $(UI_TEST_SOURCES)))
 
+# UI_FLAG = -mwindows
 LIBS =
 CXXFLAGS = -Wall -Wformat
-CXXFLAGS += -g
+# CXXFLAGS += -g
 CXXFLAGS += -IUI_LIB
 CXXFLAGS += -IUI_LIB/libs/gl3w
 CXXFLAGS += -IUI_LIB/libs/glfw/include
@@ -46,7 +47,6 @@ ifeq ($(OS),Windows_NT) #WINDOWS
    LIBS = -lgdi32 -lopengl32 -limm32 -lws2_32
    DLLS += UI_LIB/libs/glfw/lib-mingw-w64/libglfw3.a
    DLLS += UI_LIB/libs/glfw/lib-mingw-w64/libglfw3dll.a
-#    CXXFLAGS += -mwindows
    CFLAGS = $(CXXFLAGS)
 else
 	UNAME_S := $(shell uname -s)
@@ -75,8 +75,8 @@ imgui:
 server: $(SERVER_OBJS) $(CONVERT_OBJS)
 	$(CXX) -o $(SERVER_EXE) $(SERVER_OBJS) $(CONVERT_OBJS) $(CXXFLAGS) $(LIBS)
 
-client: $(CLIENT_OBJS) $(CONVERT_OBJS)
-	$(CXX) -o $(CLIENT_EXE) $(CLIENT_OBJS) $(CONVERT_OBJS) $(CXXFLAGS) $(LIBS)
+client: imgui $(CLIENT_OBJS) $(CONVERT_OBJS)
+	$(CXX) -o $(CLIENT_EXE) $(CLIENT_OBJS) $(CONVERT_OBJS) $(IMGUI_OBJS) $(DLLS) $(CXXFLAGS) $(UI_FLAG) $(LIBS)
 
 # $(EXE): imgui $(OBJS)
 # 	$(CXX) -o $(EXE) $(OBJS) $(IMGUI_OBJS) $(DLLS) $(CXXFLAGS) $(LIBS)

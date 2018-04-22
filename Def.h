@@ -1,4 +1,5 @@
 #ifndef DEF_H_
+#define DEF_H_
 
 #if defined(WIN32)
 #include <Winsock2.h>
@@ -7,6 +8,7 @@ typedef int socklen_t;
 #define MSG_DONTWAIT 0
 #elif defined(__linux__)
 #include <arpa/inet.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -21,8 +23,8 @@ typedef sockaddr SOCKADDR;
 #endif
 
 #include <cstdio>
-#include <cstring>
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
 
 #define CONNECT_BUF_SIZE (1000)
@@ -35,9 +37,9 @@ typedef sockaddr SOCKADDR;
 const char PRIMITIVE[][100] = {"REQUEST", "RESPONSE", "DISCONNECT", "RESPONSE_DISCONNECT"};
 
 int init_socket();
-int process_request(char*);
-int process_response(char*);
-int process_disconnect(char*);
+int process_request(char *);
+int process_response(char *);
+int process_disconnect(char *);
 
 
 #endif  // !DEF_H_

@@ -9,11 +9,16 @@ int main()
     init_socket();
 
     SOCKET sockSrv = socket(AF_INET, SOCK_DGRAM, 0);
+#if defined(WIN32)
     unsigned long ul = 1;
     if (ioctlsocket(sockSrv, FIONBIO, (unsigned long *)&ul) == SOCKET_ERROR)
         {
             return 1;
         }
+#elif defined(__linux__)
+    int flags = fcntl(sockSrv, F_GETFL, 0);
+    fcntl(sockSrv, F_SETFL, flags | O_NONBLOCK);
+#endif
     SOCKET sockMsg = socket(AF_INET, SOCK_STREAM, 0);
 
 #if defined(WIN32)
@@ -65,6 +70,17 @@ int main()
                            sizeof(SOCKADDR));
 
                     SOCKET sockConn = accept(sockMsg, (SOCKADDR *)&addrConn, &addrLen);
+#if defined(WIN32)
+                    unsigned long ul = 1;
+                    if (ioctlsocket(sockConn, FIONBIO, (unsigned long *)&ul) == SOCKET_ERROR)
+                        {
+                            return 1;
+                        }
+#elif defined(__linux__)
+                    int flags = fcntl(sockConn, F_GETFL, 0);
+                    fcntl(sockSrv, F_SETFL, flags | O_NONBLOCK);
+#endif
+
                     sprintf(sendBuf, "Connect established at port %d", connPort);
                     send(sockConn, sendBuf, strlen(sendBuf) + 1, MSG_NOSIGNAL);
 
@@ -80,11 +96,51 @@ int main()
                                     break;
                                 }
 
-                            recv(sockConn, recvBuf, CONNECT_BUF_SIZE, 0);
-                            printf("Received: %s\n", recvBuf);
-                            sprintf(sendBuf, "Server Received: %s", recvBuf);
-                            send(sockConn, sendBuf, strlen(sendBuf) + 1, MSG_NOSIGNAL);
+#if defined(WIN32)
+                            int ret = recv(sockConn, recvBuf, CONNECT_BUF_SIZE, MSG_DONTWAIT);
+
+                            if (ret == SOCKET_ERROR)
+                                {
+                                    int err = WSAGetLastError();
+                                    if (err == WSAEWOULDBLOCK)
+                                        {
+                                            // continue;
+                                        }
+                                    else if (err == WSAETIMEDOUT)
+                                        {
+                                            break;
+                                        }
+
+                                    else if (err == WSAENETDOWN)
+                                        {
+                                            break;
+                                        }
+                                    else
+                                        break;
+                                }
+#elif defined(__linux__)
+                            recv(sockConn, recvBuf, CONNECT_BUF_SIZE, MSG_DONTWAIT);
+
+                            if (errno != EINPROGRESS)
+                                {
+                                    int err = errno;
+                                    if (err == EINTR)
+                                        break;
+                                    // if (err == EAGAIN)
+                                    //     break;
+                                    // if (err == EPIPE)
+                                    //     break;
+                                }
+#endif
+                            else
+                                {
+                                    printf("Received: %s\n", recvBuf);
+                                    sprintf(sendBuf, "Server Received: %s", recvBuf);
+                                    send(sockConn, sendBuf, strlen(sendBuf) + 1, MSG_DONTWAIT);
+                                }
                         }
+
+                    printf("Client has disconnected.\n");
 #if defined(WIN32)
                     closesocket(sockConn);
 #elif defined(__linux__)
