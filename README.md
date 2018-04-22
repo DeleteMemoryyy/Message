@@ -43,9 +43,9 @@ This project is a part of Introduction to  Computer Network lesson, Peking Unive
 
 - 配置host地址和使用的端口
 
-  进入程序后将出现配置页面，正确配置后点击Connect按钮即可连接Server
-
   ![img1](http://otl4n2fe9.bkt.clouddn.com/Message/img1.png)
+
+  进入程序后将出现配置页面，正确配置后点击Connect按钮即可连接Server
 
   需要在Server启动后再进行连接
 
@@ -53,9 +53,9 @@ This project is a part of Introduction to  Computer Network lesson, Peking Unive
 
   - 连接成功后打开消息页面。在底部输入框输入消息，按回车发送
 
-    服务器端回复的消息将以红字在[Server]字段后显示
-
     ![img1](http://otl4n2fe9.bkt.clouddn.com/Message/img2.png)
+
+    服务器端回复的消息将以红字在[Server]字段后显示
 
   - 上部四个按钮`Clear` `Copy` `Scroll to bottom` `Disconnect`可以点击使用
 
