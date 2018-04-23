@@ -1,0 +1,8 @@
+language: c++
+compiler: gcc
+os: linux
+install:
+  - sudo apt-get install build-essential
+  - sudo apt-get build-dep glfw
+  - sudo apt-get install libxrandr-dev
+script: make
