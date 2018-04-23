@@ -1,5 +1,7 @@
 # Message
 
+![build-status](https://travis-ci.org/DeleteMemoryyy/Message.svg?branch=master)
+
 Implementation to a simple message system by `DeleteMemory`.
 
 This project is a part of Introduction to  Computer Network lesson, Peking University.
