@@ -61,17 +61,17 @@ else
 endif
 
 all: server client
-	$(RM) $(SERVER_OBJS)
-	$(RM) $(CLIENT_OBJS)
-	$(RM) $(CONVERT_OBJS)
+	-$(RM) $(SERVER_OBJS)
+	-$(RM) $(CLIENT_OBJS)
+	-$(RM) $(CONVERT_OBJS)
 	@echo Build complete for $(ECHO_MESSAGE)
 
 %.o:%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-imgui:
+imgui: clean_imgui_objs
 	@echo Building imgui
-	cd UI_LIB && $(RM) $(IMGUI_NOTDIR_OBJS) && $(MAKE)
+	cd UI_LIB && $(MAKE)
 
 server: $(SERVER_OBJS) $(CONVERT_OBJS)
 	$(CXX) -o $(SERVER_EXE) $(SERVER_OBJS) $(CONVERT_OBJS) $(CXXFLAGS) $(LIBS)
@@ -85,10 +85,16 @@ client: imgui $(CLIENT_OBJS) $(CONVERT_OBJS)
 
 UI_Test: imgui $(UI_TEST_OBJS)
 	$(CXX) -o $(UI_TEST_EXE) $(UI_TEST_OBJS) $(IMGUI_OBJS) $(DLLS) $(CXXFLAGS) $(LIBS)
-	$(RM) $(UI_TEST_OBJS)
+	-$(RM) $(UI_TEST_OBJS)
 	@echo Build ui_test complete for $(ECHO_MESSAGE)
 
 clean:
-	 $(RM) $(SERVER_EXE)
-	 $(RM) $(CLIENT_EXE)
-	 $(RM) $(UI_TEST_EXE)
+	 -$(RM) $(SERVER_EXE)
+	 -$(RM) $(CLIENT_EXE)
+	 -$(RM) $(UI_TEST_EXE)
+
+clean_imgui_objs:
+	 -$(RM) $(IMGUI_OBJS)
+
+.PHONY : clean
+.PHONY : clean_imgui_objs

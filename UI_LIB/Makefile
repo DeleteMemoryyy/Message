@@ -40,4 +40,4 @@ dep:
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	$(RM) $(OBJS)
+	-$(RM) $(OBJS)
