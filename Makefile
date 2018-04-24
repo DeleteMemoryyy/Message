@@ -75,7 +75,7 @@ imgui: clean_imgui_objs
 	cd UI_LIB && $(MAKE)
 
 server: $(SERVER_OBJS) $(UTILS_OBJS)
-	$(CXX) -o $(SERVER_EXE) $(SERVER_OBJS) $(UTILS_OBJS) $(CXXFLAGS) $(LIBS)
+	$(CXX) -o $(SERVER_EXE) $(SERVER_OBJS) $(UTILS_OBJS) $(CXXFLAGS)
 
 client: imgui $(CLIENT_OBJS) $(UTILS_OBJS)
 	$(CXX) -o $(CLIENT_EXE) $(CLIENT_OBJS) $(UTILS_OBJS) $(IMGUI_OBJS) $(DLLS) $(CXXFLAGS) $(UI_FLAG) $(LIBS)

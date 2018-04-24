@@ -1,6 +1,4 @@
-# Message
-
-![build-status](https://travis-ci.org/DeleteMemoryyy/Message.svg?branch=master)
+# Message [![build-status](https://travis-ci.org/DeleteMemoryyy/Message.svg?branch=master)](https://travis-ci.org/DeleteMemoryyy/Message)
 
 Implementation to a simple message system by `DeleteMemory`.
 
