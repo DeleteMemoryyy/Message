@@ -39,8 +39,6 @@ This project is a part of Introduction to  Computer Network lesson, Peking Unive
 
 - 命令行或PowerShell进入到Message目录下输入“mingw32-make”进行编译
 
-- bin文件夹中是我在本地静态编译好的Server端和Client端exe文件，但由于即使是使用加上-static参数的mingw编译，也还是会出现一些链接问题。我在除开发机之外的Windows 10 Home系统中测试并没有成功，显示“此应用无法在这台电脑上运行”。如果有同学能指出我在编译和配置中哪些步骤不正确，我将不胜感激
-
 ### 使用
 
 **Client**
