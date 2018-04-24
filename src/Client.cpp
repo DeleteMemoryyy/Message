@@ -239,12 +239,14 @@ struct Console
                 AddLog("Commands:");
                 for (int i = 0; i < Commands.Size; i++)
                     AddLog("- %s", Commands[i]);
+                AddLog("\n");
             }
         else if (Stricmp(command_line, "HISTORY") == 0)
             {
                 int first = History.Size - 10;
                 for (int i = first > 0 ? first : 0; i < History.Size; i++)
                     AddLog("%3d: %s\n", i, History[i]);
+                AddLog("\n");
             }
         else
             {
