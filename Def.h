@@ -8,6 +8,7 @@
 typedef int socklen_t;
 #define MSG_NOSIGNAL 0
 #define MSG_DONTWAIT 0
+
 #elif defined(__linux__)
 #include <arpa/inet.h>
 #include <errno.h>
@@ -16,6 +17,7 @@ typedef int socklen_t;
 #include <sys/socket.h>
 #include <sys/time.h>
 #include <unistd.h>
+
 typedef int SOCKET;
 typedef unsigned char BYTE;
 typedef unsigned long DWORD;

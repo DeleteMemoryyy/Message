@@ -128,7 +128,7 @@ struct Console
             ScrollToBottom = true;
         ImGui::SameLine();
         disconnectFlag = false;
-        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(252, 146, 114,220));
+        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(252, 146, 114, 220));
         if (ImGui::SmallButton("Disconnect"))
             disconnectFlag = true;
         ImGui::PopStyleColor();
@@ -142,7 +142,7 @@ struct Console
         filter.Draw("Filter", 180);
         ImGui::PopStyleVar();
         ImGui::SameLine(500.0f);
-        ImGui::Text("Lag: %lldms", time);
+        ImGui::Text("Lag: %ums", (unsigned int)time);
         ImGui::Separator();
 
         const float footer_height_to_reserve =
@@ -425,10 +425,24 @@ int main()
     // ImGui::StyleColorsClassic();
     ImGui::StyleColorsLight();
     io.Fonts->AddFontDefault();
-    ImFont *font = io.Fonts->AddFontFromFileTTF("UI_LIB/extra_fonts/Yahei_Segoe.ttf", 16.0f, NULL,
-                                                io.Fonts->GetGlyphRangesChinese());
-    IM_ASSERT(font != NULL);
-    io.FontDefault = font;
+
+    char path[256];
+    char *ch;
+#if defined(WIN32)
+    GetModuleFileName(NULL, path, 256);
+    ch = strrchr(path, '\\');
+#elif defined(__linux__)
+    readlink("/proc/self/exe", path, 256);
+    ch = strrchr(path, '/');
+#endif
+    if (ch != NULL)
+        {
+            sprintf(ch + 1, "%s", "fonts/Yahei_Segoe.ttf");
+            ImFont *font =
+                io.Fonts->AddFontFromFileTTF(path, 16.0f, NULL, io.Fonts->GetGlyphRangesChinese());
+            IM_ASSERT(font != NULL);
+            io.FontDefault = font;
+        }
 
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
@@ -595,19 +609,31 @@ int main()
                                                 }
                                         }
 #elif defined(__linux__)
-                                    recv(sockConn, recvBuf, CONNECT_BUF_SIZE, MSG_DONTWAIT);
+                                    int ret =
+                                        recv(sockConn, recvBuf, CONNECT_BUF_SIZE, MSG_DONTWAIT);
 
-                                    int err = errno;
-                                    if (err != EINPROGRESS)
+                                    if (ret < 0)
                                         {
+                                            int err = errno;
                                             if (err == EAGAIN)
                                                 {
+                                                    // printf("AGAIN\n");
                                                     // continue;
                                                 }
                                             else if (err == EINTR)
                                                 {
                                                     printf("INTR\n");
+                                                    // continue;
+                                                }
+                                            else if (err == ETIMEDOUT)
+                                                {
+                                                    printf("TIMEOUT\n");
                                                     break;
+                                                }
+                                            else if (err == EWOULDBLOCK)
+                                                {
+                                                    printf("WOULDBLOCKWO");
+                                                    // continue;
                                                 }
                                             else
                                                 {
@@ -626,7 +652,6 @@ int main()
                                             printf("Redeived: %s\n", recvBuf);
                                         }
 
-                                    // console.AddLog("[Server] %s", recvBuf);
                                     // printf("Redeived: %s\n", recvBuf);
                                     // printf("Enter message to send:\n");
                                     // scanf("%s", sendBuf);
@@ -636,6 +661,7 @@ int main()
                                     console.Draw("Message", &consoleOpen, strIp, connPort, timeLag);
                                     if (console.inputFlag)
                                         {
+                                            // printf("Message to recdeived: %s\n", recvBuf);
                                             printf("Message to send: %s\n", console.sendBuf);
                                             timeSent = GetCurrentTimeMsec();
                                             clacLag = true;

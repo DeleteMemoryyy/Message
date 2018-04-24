@@ -1,10 +1,5 @@
-# Binary Files
-Message_Server
-Message_Client
-UI_Test
-
 # ImGui setting
-imgui.ini
+*imgui.ini
 
 # VS Code
 .vscode/
@@ -42,4 +37,4 @@ imgui.ini
 *.out
 *.app
 
-!bin/*
+!bin/

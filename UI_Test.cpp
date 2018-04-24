@@ -49,11 +49,11 @@ int main(int, char**)
     // - Read 'misc/fonts/README.txt' for more instructions and details.
     // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
     io.Fonts->AddFontDefault();
-    io.Fonts->AddFontFromFileTTF("UI_LIB/extra_fonts/Roboto-Medium.ttf", 16.0f);
-    io.Fonts->AddFontFromFileTTF("UI_LIB/extra_fonts/Cousine-Regular.ttf", 15.0f);
-    io.Fonts->AddFontFromFileTTF("UI_LIB/extra_fonts/DroidSans.ttf", 16.0f);
-    io.Fonts->AddFontFromFileTTF("UI_LIB/extra_fonts/ProggyTiny.ttf", 10.0f);
-    ImFont *font = io.Fonts->AddFontFromFileTTF("UI_LIB/extra_fonts/Yahei_Segoe.ttf", 16.0f, NULL,
+    io.Fonts->AddFontFromFileTTF("fonts/Roboto-Medium.ttf", 16.0f);
+    io.Fonts->AddFontFromFileTTF("fonts/Cousine-Regular.ttf", 15.0f);
+    io.Fonts->AddFontFromFileTTF("fonts/DroidSans.ttf", 16.0f);
+    io.Fonts->AddFontFromFileTTF("fonts/ProggyTiny.ttf", 10.0f);
+    ImFont *font = io.Fonts->AddFontFromFileTTF("fonts/Yahei_Segoe.ttf", 16.0f, NULL,
                                                 io.Fonts->GetGlyphRangesChinese());
     IM_ASSERT(font != NULL);
     io.FontDefault = font;
