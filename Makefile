@@ -82,10 +82,10 @@ server: $(SERVER_OBJS) $(UTILS_OBJS)
 client: imgui $(CLIENT_OBJS) $(UTILS_OBJS)
 	$(CXX) -o $(BINPATH)$(CLIENT_EXE) $(CLIENT_OBJS) $(UTILS_OBJS) $(IMGUI_OBJS) $(DLLS) $(CXXFLAGS) $(UI_FLAG) $(LIBS)
 
-UI_Test: imgui $(UI_TEST_OBJS)
+ui_test: imgui $(UI_TEST_OBJS)
 	$(CXX) -o $(BINPATH)$(UI_TEST_EXE) $(UI_TEST_OBJS) $(IMGUI_OBJS) $(DLLS) $(CXXFLAGS) $(LIBS)
 	-$(RM) $(UI_TEST_OBJS)
-	@echo Build ui_test complete for $(ECHO_MESSAGE)
+	@echo Build UI_Test complete for $(ECHO_MESSAGE)
 
 clean: clean_imgui_objs
 	 -$(RM) $(CLIENT_OBJS)
