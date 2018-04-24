@@ -13,19 +13,13 @@ This project is a part of Introduction to  Computer Network lesson, Peking Unive
 
 **Windows**
 
-- 需要预安装mingw（最好是mingw-w64）环境，并正确配置环境变量中的环境变量
+- bin下的exe文件为静态编译过的可执行文件，可直接运行
+
+- 如需重新编译，请使用mingw-w64环境，并正确配置环境变量中的环境变量
 
   > 环境变量配置
   >
   > - Path：{mingw-w64-path}\bin
-  >
-  > - C_INCLUDE_PATH：{mingw-w64-path}\include
-  >
-  > - CPLUS_INCLUDE_PATH：
-  >
-  >   {mingw-w64-path}\lib\gcc\x86_64-w64-mingw32\7.3.0\include\c++;{mingw-w64-path}\lib\gcc\x86_64-w64-mingw32\7.3.0\include\c++\backward
-  >
-  > - LIBRARY_PATH：{mingw-w64-path}lib
 
   如果需下载，可自官网下载选择安装包
 
