@@ -1,7 +1,9 @@
 CXX = g++
 CC = gcc
 MAKE = make
-BINDIR = bin/
+BINPATH = bin/
+SRCPATH = src/
+LIBPATH = UI_LIB/
 SERVER = Message_Server
 CLIENT = Message_Client
 UI_TEST = UI_Test
@@ -15,24 +17,24 @@ SOURCES =
 SERVER_SOURCES = Server.cpp
 CLIENT_SOURCES = Client.cpp
 UTILS_SOURCES = Utils.cpp
-IMGUI_SOURCES = UI_LIB/imgui_impl_glfw_gl3.cpp UI_LIB/imgui.cpp UI_LIB/imgui_demo.cpp UI_LIB/imgui_draw.cpp
 UI_TEST_SOURCES = UI_Test.cpp
+IMGUI_SOURCES = $(LIBPATH)imgui_impl_glfw_gl3.cpp $(LIBPATH)imgui.cpp $(LIBPATH)imgui_demo.cpp $(LIBPATH)imgui_draw.cpp
 
 OBJS = $(addsuffix .o, $(basename $(SOURCES)))
 SERVER_OBJS = $(addsuffix .o, $(basename $(SERVER_SOURCES)))
 CLIENT_OBJS = $(addsuffix .o, $(basename $(CLIENT_SOURCES)))
 UTILS_OBJS = $(addsuffix .o, $(basename $(UTILS_SOURCES)))
 IMGUI_OBJS = $(addsuffix .o, $(basename $(IMGUI_SOURCES)))
-IMGUI_OBJS += UI_LIB/gl3w.o
-IMGUI_NOTDIR_OBJS = $(notdir $(IMGUI_OBJS))
+IMGUI_OBJS += $(LIBPATH)gl3w.o
+IMGUI_NODIR_OBJS = $(notdir $(IMGUI_OBJS))
 UI_TEST_OBJS = $(addsuffix .o, $(basename $(UI_TEST_SOURCES)))
 
 LIBS =
 CXXFLAGS = -Wall -Wformat
 # CXXFLAGS += -g
-CXXFLAGS += -IUI_LIB
-CXXFLAGS += -IUI_LIB/libs/gl3w
-CXXFLAGS += -IUI_LIB/libs/glfw/include
+CXXFLAGS += -I$(LIBPATH)
+CXXFLAGS += -I$(LIBPATH)libs/gl3w
+CXXFLAGS += -I$(LIBPATH)libs/glfw/include
 CFLAGS = $(CXXFLAGS)
 
 ifeq ($(OS),Windows_NT) #WINDOWS
@@ -41,13 +43,13 @@ ifeq ($(OS),Windows_NT) #WINDOWS
    RM = del
    UI_FLAG = -mwindows
 
-   SERVER_EXE = $(BINDIR)$(addsuffix .exe, $(basename $(SERVER)))
-   CLIENT_EXE = $(BINDIR)$(addsuffix .exe, $(basename $(CLIENT)))
-   UI_TEST_EXE = $(BINDIR)$(addsuffix .exe, $(basename $(UI_TEST)))
+   SERVER_EXE = $(addsuffix .exe, $(SERVER))
+   CLIENT_EXE = $(addsuffix .exe, $(CLIENT))
+   UI_TEST_EXE = $(addsuffix .exe, $(UI_TEST))
 
    LIBS = -lgdi32 -lopengl32 -limm32 -lws2_32 -lstdc++
-   DLLS += UI_LIB/libs/glfw/lib-mingw-w64/libglfw3.a
-   DLLS += UI_LIB/libs/glfw/lib-mingw-w64/libglfw3dll.a
+   DLLS += $(LIBPATH)libs/glfw/lib-mingw-w64/libglfw3.a
+   DLLS += $(LIBPATH)libs/glfw/lib-mingw-w64/libglfw3dll.a
    CXXFLAGS += -static
    CFLAGS = $(CXXFLAGS)
 else
@@ -67,33 +69,34 @@ all: server client
 	@-$(RM) $(UTILS_OBJS)
 	@echo [Build complete for $(ECHO_MESSAGE)]
 
-%.o:%.cpp
+%.o:$(SRCPATH)%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 imgui: clean_imgui_objs
 	@echo [Building imgui]
-	cd UI_LIB && $(MAKE)
+	cd $(LIBPATH) && $(MAKE)
 
 server: $(SERVER_OBJS) $(UTILS_OBJS)
-	$(CXX) -o $(SERVER_EXE) $(SERVER_OBJS) $(UTILS_OBJS) $(CXXFLAGS)
+	$(CXX) -o $(BINPATH)$(SERVER_EXE) $(SERVER_OBJS) $(UTILS_OBJS) $(CXXFLAGS) $(LIBS)
 
 client: imgui $(CLIENT_OBJS) $(UTILS_OBJS)
-	$(CXX) -o $(CLIENT_EXE) $(CLIENT_OBJS) $(UTILS_OBJS) $(IMGUI_OBJS) $(DLLS) $(CXXFLAGS) $(UI_FLAG) $(LIBS)
+	$(CXX) -o $(BINPATH)$(CLIENT_EXE) $(CLIENT_OBJS) $(UTILS_OBJS) $(IMGUI_OBJS) $(DLLS) $(CXXFLAGS) $(UI_FLAG) $(LIBS)
 
 UI_Test: imgui $(UI_TEST_OBJS)
-	$(CXX) -o $(UI_TEST_EXE) $(UI_TEST_OBJS) $(IMGUI_OBJS) $(DLLS) $(CXXFLAGS) $(LIBS)
+	$(CXX) -o $(BINPATH)$(UI_TEST_EXE) $(UI_TEST_OBJS) $(IMGUI_OBJS) $(DLLS) $(CXXFLAGS) $(LIBS)
 	-$(RM) $(UI_TEST_OBJS)
 	@echo Build ui_test complete for $(ECHO_MESSAGE)
 
 clean: clean_imgui_objs
 	 -$(RM) $(CLIENT_OBJS)
 	 -$(RM) $(SERVER_OBJS)
-	 -$(RM) $(SERVER_EXE)
-	 -$(RM) $(CLIENT_EXE)
-	 -$(RM) $(UI_TEST_EXE)
+	 -$(RM) $(UTILS_OBJS)
+	 -cd $(BINPATH) && $(RM) $(SERVER_EXE)
+	 -cd $(BINPATH) && $(RM) $(CLIENT_EXE)
+	 -cd $(BINPATH) && $(RM) $(UI_TEST_EXE)
 
 clean_imgui_objs:
-	 -cd UI_LIB && $(RM) $(IMGUI_NOTDIR_OBJS)
+	 -cd $(LIBPATH) && $(RM) $(IMGUI_NODIR_OBJS)
 
 .PHONY : clean
 .PHONY : clean_imgui_objs

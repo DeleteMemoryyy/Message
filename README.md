@@ -37,7 +37,7 @@ This project is a part of Introduction to  Computer Network lesson, Peking Unive
 
 - 配置host地址和使用的端口
 
-  ![img1](http://otl4n2fe9.bkt.clouddn.com/Message/img1.png)
+  ![img1](img/img1.png)
 
   进入程序后将出现配置页面，正确配置后点击Connect按钮即可连接Server
 
@@ -49,7 +49,7 @@ This project is a part of Introduction to  Computer Network lesson, Peking Unive
 
   - 连接成功后打开消息页面。在底部输入框输入消息，按回车发送
 
-    ![img1](http://otl4n2fe9.bkt.clouddn.com/Message/img2.png)
+    ![img1](img/img2.png)
 
     服务器端回复的消息将以红字在[Server]字段后显示
 
@@ -59,7 +59,7 @@ This project is a part of Introduction to  Computer Network lesson, Peking Unive
 
   - 在Filter框中输入字符串后，只会显示包含该字符串的信息
 
-    ![img3](http://otl4n2fe9.bkt.clouddn.com/Message/img3.png)
+    ![img3](img/img3.png)
 
   - 可使用命令：
 
@@ -67,7 +67,7 @@ This project is a part of Introduction to  Computer Network lesson, Peking Unive
 
     - HISTORY——逐条显示历史消息
 
-      ![img4](http://otl4n2fe9.bkt.clouddn.com/Message/img4.png)
+      ![img4](img/img4.png)
 
     - CLEAR——同`Clear`按钮，清屏（不会删除历史消息）
 
