@@ -17,6 +17,7 @@ SOURCES =
 SERVER_SOURCES = Server.cpp
 CLIENT_SOURCES = Client.cpp
 UTILS_SOURCES = Utils.cpp
+UI_SOURCES = UI.cpp
 UI_TEST_SOURCES = UI_Test.cpp
 IMGUI_SOURCES = $(LIBPATH)imgui_impl_glfw_gl3.cpp $(LIBPATH)imgui.cpp $(LIBPATH)imgui_demo.cpp $(LIBPATH)imgui_draw.cpp
 
@@ -24,6 +25,7 @@ OBJS = $(addsuffix .o, $(basename $(SOURCES)))
 SERVER_OBJS = $(addsuffix .o, $(basename $(SERVER_SOURCES)))
 CLIENT_OBJS = $(addsuffix .o, $(basename $(CLIENT_SOURCES)))
 UTILS_OBJS = $(addsuffix .o, $(basename $(UTILS_SOURCES)))
+UI_OBJS = $(addsuffix .o, $(basename $(UI_SOURCES)))
 IMGUI_OBJS = $(addsuffix .o, $(basename $(IMGUI_SOURCES)))
 IMGUI_OBJS += $(LIBPATH)gl3w.o
 IMGUI_NODIR_OBJS = $(notdir $(IMGUI_OBJS))
@@ -79,8 +81,8 @@ imgui: clean_imgui_objs
 server: $(SERVER_OBJS) $(UTILS_OBJS)
 	$(CXX) -o $(BINPATH)$(SERVER_EXE) $(SERVER_OBJS) $(UTILS_OBJS) $(CXXFLAGS) $(LIBS)
 
-client: imgui $(CLIENT_OBJS) $(UTILS_OBJS)
-	$(CXX) -o $(BINPATH)$(CLIENT_EXE) $(CLIENT_OBJS) $(UTILS_OBJS) $(IMGUI_OBJS) $(DLLS) $(CXXFLAGS) $(UI_FLAG) $(LIBS)
+client: imgui $(CLIENT_OBJS) $(UTILS_OBJS) $(UI_OBJS)
+	$(CXX) -o $(BINPATH)$(CLIENT_EXE) $(CLIENT_OBJS) $(UTILS_OBJS) $(UI_OBJS) $(IMGUI_OBJS) $(DLLS) $(CXXFLAGS) $(UI_FLAG) $(LIBS)
 
 ui_test: imgui $(UI_TEST_OBJS)
 	$(CXX) -o $(BINPATH)$(UI_TEST_EXE) $(UI_TEST_OBJS) $(IMGUI_OBJS) $(DLLS) $(CXXFLAGS) $(LIBS)
@@ -91,6 +93,7 @@ clean: clean_imgui_objs
 	 -$(RM) $(CLIENT_OBJS)
 	 -$(RM) $(SERVER_OBJS)
 	 -$(RM) $(UTILS_OBJS)
+	 -$(RM) $(UI_OBJS)
 	 -cd $(BINPATH) && $(RM) $(SERVER_EXE)
 	 -cd $(BINPATH) && $(RM) $(CLIENT_EXE)
 	 -cd $(BINPATH) && $(RM) $(UI_TEST_EXE)

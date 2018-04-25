@@ -1,7 +1,5 @@
 #include "Def.h"
 
-using namespace std;
-
 #define MAX_QUEUE_SIZE (10)
 
 int main()
@@ -34,7 +32,7 @@ int main()
     addrSrv.sin_family = AF_INET;
 
     if (bind(sockSrv, (SOCKADDR *)&addrSrv, sizeof(SOCKADDR)) < 0)
-        printf("Srv bind faild.\n");
+        printf("srv socket bind faild.\n");
 
 #if defined(WIN32)
     int addrLen = sizeof(SOCKADDR);

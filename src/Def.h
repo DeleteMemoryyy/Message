@@ -47,5 +47,4 @@ int process_response(char *);
 int process_disconnect(char *);
 unsigned long long GetCurrentTimeMsec();
 
-
 #endif  // !DEF_H_
